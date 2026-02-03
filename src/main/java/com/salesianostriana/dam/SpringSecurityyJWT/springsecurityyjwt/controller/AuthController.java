@@ -1,11 +1,5 @@
 package com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.controller;
 
-import com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.dto.ApiResponse;
-import com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.dto.AuthResponse;
-import com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.dto.LoginRequest;
-import com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.security.JwtService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,15 +7,20 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Controlador de Autenticación
- *
- * Endpoints:
- * - POST /api/auth/login - Autentica usuario y devuelve token JWT
- * - POST /api/auth/validate - Valida un token JWT
- */
+import com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.dto.ApiResponse;
+import com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.dto.AuthResponse;
+import com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.dto.LoginRequest;
+import com.salesianostriana.dam.SpringSecurityyJWT.springsecurityyjwt.security.JwtService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
@@ -31,15 +30,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    /**
-     * Endpoint de login
-     * POST /api/auth/login
-     *
-     * Credenciales disponibles:
-     * - admin / admin (rol ADMIN)
-     * - user / user (rol USER)
-     * - guest / guest (rol GUEST)
-     */
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
         log.info("Intento de login para usuario: {}", request.getUsername());
@@ -97,10 +87,6 @@ public class AuthController {
         }
     }
 
-    /**
-     * Endpoint para validar un token JWT
-     * POST /api/auth/validate
-     */
     @PostMapping("/validate")
     public ResponseEntity<ApiResponse> validateToken(@RequestParam String token) {
         try {
